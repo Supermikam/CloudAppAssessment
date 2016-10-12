@@ -22,7 +22,6 @@
     var slope5 = Math.tan(-11 * Math.PI/12 );
     var slope6 = Math.tan(7 * Math.PI/12 );
 
-
 	function resizePage(){
 
 	var windowHight = window.innerHeight;
@@ -82,10 +81,10 @@
 			
 	}
 
-
 	function drawQuestion(currentQuestion){
+	    
+	    console.log("the correct answer is", currentQuestion.correctAnswer);
 
-		console.log('canvas border length is', canvasBorderLength);
 		ctx.clearRect(0,0,canvasBorderLength,canvasBorderLength);
 		
 		//draw background if exist;
@@ -126,13 +125,10 @@
 			
 			el = el.offsetParent;	
 		}
-		console.log('the position of the canvas returned by getPosition function is:', xPos, yPos);
 
 		return {x:xPos,y:yPos};
 	}
 	
-
-
 	function updatePosition(){
 	    
 	    
@@ -164,21 +160,20 @@
         else{return null}
     }
     
-    
 	function returnChoice(e){
 	    var mouseX;
 	    var mouseY;
     	if (e.button == 0){
     		mouseX = e.clientX - canvasPosition.left;
     		mouseY = e.clientY - canvasPosition.top;
-    		console.log('mouse clicked at point', mouseX,mouseY);
+
     	}
     	
     	var onTheRing = verifyOnTheRing(mouseX,mouseY);
     	
     	if (onTheRing){
     	    var possibleChoice = getPossibleChoice(mouseX,mouseY);
-    	    console.log("in returnChoice, choice calculated is", possibleChoice);
+
     	    if (possibleChoice) {return possibleChoice}
     	    else{return null}
     	    
@@ -292,11 +287,9 @@ function colorTestController($scope){
         var h = hsl[0];
         var s = hsl[1];
         var l = hsl[2];
-        console.log( "the hsl color is", h, ",", s, ',', l);
         
 		var rgbColor = hslToRgb(h,s,l);
         
-        console.log("rgb color is ", rgbColor[0], ',',rgbColor[1],',',rgbColor[2]);
         
 		var r = rgbColor[0];
 		var g = rgbColor[1];
@@ -307,7 +300,6 @@ function colorTestController($scope){
         return targetL;
         
     }
-    
 	//Generater Qustion
     function Question(args){
         this.color1 = args.color1;
@@ -342,11 +334,13 @@ function colorTestController($scope){
     //level2 helper for questionGenerater
     function findTheCorrectAnswer(targetL, targetArrqy){
         var correctAnswer;
+
         for(var i = 0; i <3; i++){
            if (targetArrqy[i][2] === targetL){
-               correctAnswer = i;
+               correctAnswer = i + 1;
            } 
         }
+        
         return correctAnswer;
         
     }
@@ -387,7 +381,6 @@ function colorTestController($scope){
         
         /* get three target and shuffle */
         var targetL = calculateTargetL(color1);
-        console.log("target lumination is: ", targetL);
         var targetArrqy = generateTargetArray(targetL,args.difference);
         var correctAnswer = findTheCorrectAnswer(targetL, targetArrqy);
         
@@ -420,7 +413,6 @@ function colorTestController($scope){
         
         return question;
     }
-    
     //level0 helper function for $scope.initializeTest
     function getFirstQuestion(){
 
@@ -555,7 +547,6 @@ function colorTestController($scope){
         $scope.target3Exp = toHSLExpression($scope.target3);
         
     }
-    
     //Entry
     $scope.initializeTest = function(){
 
@@ -605,6 +596,7 @@ function colorTestController($scope){
             var newQuestion = generateTheNextQustion(analyseArray,0,0,currentQuestion.level);
             currentQuestion = newQuestion;
             setupScopeValue(currentQuestion);
+            drawQuestion(currentQuestion);
          
             
         }else{
@@ -615,16 +607,15 @@ function colorTestController($scope){
     };
 	
 	$scope.handleClick = function(event){
-
-	    var choice =returnChoice(event);
-	   // if(choice){
-	   //     verifyAnswer(choice)
-	   // }
+        if (!$scope.testFinished){
+    	    var choice =returnChoice(event);
+    	    if(choice){
+    	        verifyAnswer(choice)
+    	    }
+        }
 	}
 	
-
 	//canvas functions(should be moved to another module when I know how)
-	
 	$scope.initializeTest();
 	
 }
