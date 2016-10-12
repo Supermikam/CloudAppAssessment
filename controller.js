@@ -15,6 +15,12 @@
 	var startAngle = Math.PI * (1/12);
 	var endAngle = Math.PI * (3/2 + (1/12));
 	var canvasPosition;
+	var slope1 = Math.tan(5 * Math.PI/12);
+	var slope2 = Math.tan(-Math.PI/12);
+    var slope3 = Math.tan(-Math.PI/4);
+    var slope4 = Math.tan(-3 * Math.PI/4);
+    var slope5 = Math.tan(-11 * Math.PI/12 );
+    var slope6 = Math.tan(7 * Math.PI/12 );
 
 
 	function resizePage(){
@@ -133,14 +139,51 @@
 		canvasPosition = canvas.getBoundingClientRect();
 
 	}
-
-	function returnChoice(e){
-	if (e.button == 0){
-		var mouseX = e.clientX - canvasPosition.left;
-		var mouseY = e.clientY - canvasPosition.top;
-		console.log('mouse clicked at point', mouseX,mouseY);
+	
+	function verifyOnTheRing(x,y){
+	    var sqrDistance = (x-centerX)*(x-centerX) + (y-centerY)*(y-centerY);
+	    var sqrInnerRadius = greyInnerRadius * greyInnerRadius;
+	    var sqrOuterRadius = greyOuterRadius * greyOuterRadius;
+	    if (( sqrDistance >= sqrInnerRadius) && (sqrDistance <= sqrOuterRadius)){
+	        return true
+	    }else{return false}
+	    
 	}
-}
+    
+    function getPossibleChoice(x,y){
+        
+        
+
+        
+        x = x-centerX;
+        y = centerY-y;
+        
+        if ((y < x * slope1) && (y> x * slope2)){return 1}
+        else if ((y < x * slope3) && (y < x * slope4)){return 2}
+        else if ((y > x * slope5) && (y< x * slope6)){return 3}
+        else{return null}
+    }
+    
+    
+	function returnChoice(e){
+	    var mouseX;
+	    var mouseY;
+    	if (e.button == 0){
+    		mouseX = e.clientX - canvasPosition.left;
+    		mouseY = e.clientY - canvasPosition.top;
+    		console.log('mouse clicked at point', mouseX,mouseY);
+    	}
+    	
+    	var onTheRing = verifyOnTheRing(mouseX,mouseY);
+    	
+    	if (onTheRing){
+    	    var possibleChoice = getPossibleChoice(mouseX,mouseY);
+    	    console.log("in returnChoice, choice calculated is", possibleChoice);
+    	    if (possibleChoice) {return possibleChoice}
+    	    else{return null}
+    	    
+    	}else{return null}
+    }
 
 	//level2 helper function for calculateTargetL and toHex
 	function hslToRgb(h,s,l){
@@ -242,13 +285,6 @@ function colorTestController($scope){
 	$scope.canvasHeight = '500px';
 	$scope.canvasWidth = ' 500px';
 	$scope.barHeight = '50px';
-	
-    
-    
-
-    //level3 helper funciton for calculateTargetL
-   
-    //level2 helper function for questionGenerater
 	
 
 		
@@ -538,7 +574,7 @@ function colorTestController($scope){
     };
     
     //EventHandler
-    $scope.verifyAnswer = function(choice){
+    function verifyAnswer(choice){
         /* record the choice */
         $scope.noOfQuestions += 1;
         currentQuestion.answer = choice;
@@ -580,7 +616,10 @@ function colorTestController($scope){
 	
 	$scope.handleClick = function(event){
 
-		returnChoice(event);
+	    var choice =returnChoice(event);
+	   // if(choice){
+	   //     verifyAnswer(choice)
+	   // }
 	}
 	
 
