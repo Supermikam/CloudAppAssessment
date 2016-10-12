@@ -18,8 +18,6 @@
 
 
 	function resizePage(){
-	
-	updatePosition();
 
 	var windowHight = window.innerHeight;
 	var windowWidth = window.innerWidth;
@@ -122,17 +120,24 @@
 			
 			el = el.offsetParent;	
 		}
+		console.log('the position of the canvas returned by getPosition function is:', xPos, yPos);
+
 		return {x:xPos,y:yPos};
 	}
+	
+
 
 	function updatePosition(){
-		canvasPosition = getPosition(canvas);
+	    
+	    
+		canvasPosition = canvas.getBoundingClientRect();
+
 	}
 
 	function returnChoice(e){
 	if (e.button == 0){
-		var mouseX = e.clientX - canvasPosition.x;
-		var mouseY = e.clientY - canvasPosition.y;
+		var mouseX = e.clientX - canvasPosition.left;
+		var mouseY = e.clientY - canvasPosition.top;
 		console.log('mouse clicked at point', mouseX,mouseY);
 	}
 }
@@ -528,6 +533,7 @@ function colorTestController($scope){
 
 		resizePage();
 		drawQuestion(currentQuestion);
+		updatePosition();
 
     };
     
@@ -573,11 +579,10 @@ function colorTestController($scope){
     };
 	
 	$scope.handleClick = function(event){
+
 		returnChoice(event);
 	}
 	
-	
-
 
 	//canvas functions(should be moved to another module when I know how)
 	
