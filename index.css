@@ -1,0 +1,44 @@
+.up {
+  position: absolute;
+  z-index: 2;
+  width: 300px;
+  height: 300px;
+  margin-left: 40%;
+  margin-right: auto;
+  margin-top: 100px;
+  margin-bottom: 20px; }
+
+.back {
+  position: absolute;
+  z-index: 1;
+  width: 500px;
+  height: 500px;
+  margin-left: 30%;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 20px; }
+
+.down {
+  float: left;
+  width: 20%;
+  height: 150px;
+  margin-left: 10%; }
+
+#first {
+  position: relative;
+  height: 550px; }
+
+canvas {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.25%;
+  margin-bottom: 1.25%;
+  display: block; }
+
+#top {
+  background: grey; }
+
+#bottom {
+  background: grey; }
+
+/*# sourceMappingURL=index.css.map */

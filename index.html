@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<title>Guess</title>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<link href="index.css" rel="stylesheet">
+</head>
+
+<body ng-app = 'app'>
+
+	
+    <div class='container' ng-controller = 'colorTestController'>
+	
+		<div id="top" >
+			<h1>Color Test</h1>
+			<div ng-show = 'testFinished'>Your Test Result: {{testResult}}</div>
+			<div ng-show = '!testFinished'>Qestions answered: {{noOfQuestions}}</div>
+			<div ng-show = "testFinished" ng-click='initializeTest()'>Restart</div>
+		</div>
+		
+        <div id='test-content'>
+            <canvas  id="board" width='500px' height = '500px' ng-click = 'handleClick($event)'></canvas>
+
+        </div>
+        
+		<div id='bottom'>
+		</div>
+        
+    </div>
+	<script src='controller.js'></script>
+</body>
+</html>
