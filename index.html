@@ -20,17 +20,21 @@
     <div class='container' ng-controller = 'colorTestController'>
 	
 		<div id="top" >
-			<h1>The color at the center is as light as ...</h1>
+			<h1>The color at the center is as grey as ...</h1>
 
 		</div>
 		
         <div id='test-content'>
-            <canvas  id="board" width='500px' height = '500px' ng-click = 'handleClick($event)'></canvas>
+            <canvas  id="board" width='600px' height = '600px' ng-click = 'handleClick($event)'></canvas>
 
         </div>
         
 		<div id='bottom'>
 			<progress class={{progressBarClass}} value={{progressValue}} max={{progressMax}}></progress>
+		</div>
+		
+		<div ng-show = 'testFinished' ng-click = 'initializeTest' >
+			<p >RESTART</p>
 		</div>
         
     </div>

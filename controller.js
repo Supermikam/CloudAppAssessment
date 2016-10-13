@@ -21,6 +21,14 @@
     var slope4 = Math.tan(-3 * Math.PI/4);
     var slope5 = Math.tan(-11 * Math.PI/12 );
     var slope6 = Math.tan(7 * Math.PI/12 );
+    
+    var canvasOriginalLength = 600;
+    var canvasCenterX = canvasOriginalLength / 2;
+    var canvasCenterY = canvasCenterX;
+    var canvasInnerRadius = Math.floor(canvasCenterX * 0.25);
+    var canvasOuterRadius = Math.floor(canvasCenterX * 0.4);
+    var canvasGreyInnerRadius = Math.floor(canvasCenterX* 0.6);
+    var canvasGreyOuterRadius = Math.floor(canvasCenterX * (6/7));
 
 	function resizePage(){
 
@@ -55,7 +63,7 @@
 
 	function drawCircle(color,radius){
 		ctx.beginPath();
-		ctx.arc(centerX,centerY,radius, 0, Math.PI * 2, true);
+		ctx.arc(canvasCenterX,canvasCenterY,radius, 0, Math.PI * 2, true);
 		ctx.closePath();
 		ctx.fillStyle = color;
 		ctx.fill();
@@ -64,8 +72,8 @@
 	function drawFan(start,end,color){
 
 		ctx.beginPath();
-		ctx.arc(centerX,centerY,greyOuterRadius,start,end,true);
-		ctx.arc(centerX,centerY,greyInnerRadius,end,start,false);
+		ctx.arc(canvasCenterX,canvasCenterY,canvasGreyOuterRadius,start,end,true);
+		ctx.arc(canvasCenterX,canvasCenterY,canvasGreyInnerRadius,end,start,false);
 		ctx.closePath();
 		ctx.fillStyle = color;
 		ctx.fill();
@@ -85,16 +93,16 @@
 	    
 	    console.log("the correct answer is", currentQuestion.correctAnswer);
 
-		ctx.clearRect(0,0,canvasBorderLength,canvasBorderLength);
+		ctx.clearRect(0,0,canvasOriginalLength,canvasOriginalLength);
 		
 		//draw background if exist;
 		if (currentQuestion.color2){
 			var outerCircleColor = toHex(currentQuestion.color2);
-			drawCircle(outerCircleColor,outerRadius);
+			drawCircle(outerCircleColor,canvasOuterRadius);
 		}
 		//draw inner circle
 		var innerCircleColor = toHex(currentQuestion.color1);
-		drawCircle(innerCircleColor,innerRadius);
+		drawCircle(innerCircleColor,canvasInnerRadius);
 		
 		
 	
@@ -362,19 +370,33 @@ function colorTestController($scope, $timeout){
     function generateTargetArray(targetL,difference){
         var h = 0;
         var l = targetL;
-        var differenceArray = [[difference * -1, difference], [difference, difference * 2],[difference * -2, difference * -1] ];
+        
+        var d1 = difference * -2;
+        var d2 = difference * -1;
+        var d3 = difference;
+        var d4 = difference *2
+        
+
+
+        var differenceArray = [[d2, d3], [d3, d4],[d1, d2]];
+  
         differenceArray = shuffle(differenceArray);
+  
 		var targetArrayLegual = false;
 		var targetArray;
 		
 		while (!targetArrayLegual && differenceArray.length != 0){
-			if((l+differenceArray[0][0] >=0) && (l+ differenceArray[0][0] <=1) 
-					&& (l+differenceArray[0][1] >= 0) &&(l+differenceArray[0][1] <=1)){
+			if((l + differenceArray[0][0] >= 0) && (l + differenceArray[0][0] <=1) 
+					&& (l + differenceArray[0][1] >= 0) && (l + differenceArray[0][1] <=1)){
+					
 					targetArrayLegual = true;	
-					targetArray =  [[h,0,l],[h,0,l+differenceArray[0][0]],[h, 0, l+differenceArray[0][1]]];
-			}else{differenceArray.pop();}
+					targetArray =  [[h,0,l],[h,0,l + differenceArray[0][0]],[h, 0, l + differenceArray[0][1]]];
+			}else{
+			    
+			    var dropping = differenceArray.shift(); 
+
+			}
 		}
-        console.log("checking targetArray",targetArray);
 
         targetArray = shuffle(targetArray);
         return targetArray;
@@ -382,7 +404,7 @@ function colorTestController($scope, $timeout){
     }
     //level1 helper for get the firstQuestion & generateTheNextQustion
     function questionGenerater(args){
-        
+
         var color1 = generateColor(args.minS,args.maxS,args.minL,args.maxL);
 
         
