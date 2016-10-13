@@ -39,9 +39,17 @@ canvas{
 }
 
 #top {
-	background: grey;
+	h1{
+	  text-align: center;
+	  font-family: 'Trirong', serif;
+    color: #777;
+	}
 }
 
 #bottom{
-	background: grey;
+progress {
+  width: 70%;
+  text-align: center;
+  margin-left: 15%;
+}
 }

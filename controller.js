@@ -280,6 +280,9 @@ function colorTestController($scope){
 	$scope.canvasHeight = '500px';
 	$scope.canvasWidth = ' 500px';
 	$scope.barHeight = '50px';
+	$scope.progressBarClass = 'progress progress-warning';
+	$scope.progressValue= '1';
+	$scope.progressMax = '100';
 	
 
 		
@@ -314,7 +317,9 @@ function colorTestController($scope){
     }
     //level3 helper for generateTargetArray
     function shuffle(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex;
+      var currentIndex = array.length;
+      var temporaryValue;
+      var randomIndex;
     
       // While there remain elements to shuffle...
       while (0 !== currentIndex) {
@@ -534,6 +539,21 @@ function colorTestController($scope){
     }
     //Level0 helper for $scope.initializeTest 
 	//Seems not nessesary
+    function setProgressBar(){
+        
+        
+        if ($scope.noOfQuestions <6){
+            $scope.progressValue = Math.floor(($scope.noOfQuestions)/6 * 100).toString();
+        } else if($scope.noOfQuestions <9){
+             $scope.progressValue = Math.floor(($scope.noOfQuestions)/9 * 100).toString();
+             $scope.progressBarClass = 'progress progress-info';
+        }else {
+             $scope.progressValue = Math.floor(($scope.noOfQuestions)/12 * 100).toString();
+             $scope.progressBarClass = 'progress progress-success';
+        }
+   
+    }
+   
     function setupScopeValue(){
         $scope.colorToTest = currentQuestion.color1;
         $scope.colorToTestExp = toHSLExpression($scope.colorToTest);
@@ -545,6 +565,8 @@ function colorTestController($scope){
         $scope.target2Exp = toHSLExpression($scope.target2);
         $scope.target3 = currentQuestion.target3;
         $scope.target3Exp = toHSLExpression($scope.target3);
+        
+        setProgressBar();
         
     }
     //Entry
@@ -602,7 +624,7 @@ function colorTestController($scope){
         }else{
             var finalResultArray = generateTheArrayOfTestResultForAnalyse();
             $scope.testResult = analyseTest(finalResultArray);
-            
+            $scope.progressValue = '100';
         }
     };
 	

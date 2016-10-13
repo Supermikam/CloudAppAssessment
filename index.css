@@ -35,10 +35,14 @@ canvas {
   margin-bottom: 1.25%;
   display: block; }
 
-#top {
-  background: grey; }
+#top h1 {
+  text-align: center;
+  font-family: 'Trirong', serif;
+  color: #777; }
 
-#bottom {
-  background: grey; }
+#bottom progress {
+  width: 70%;
+  text-align: center;
+  margin-left: 15%; }
 
 /*# sourceMappingURL=index.css.map */
