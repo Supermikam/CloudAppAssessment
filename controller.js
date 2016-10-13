@@ -263,7 +263,7 @@
 	//canvas.addEventListener('click', returnChoice,false);
 
 angular.module('app',[]).controller('colorTestController',colorTestController);
-function colorTestController($scope){
+function colorTestController($scope, $timeout){
     var questionHistory;
     var currentQuestion;
     var levelArgs = [
@@ -283,6 +283,7 @@ function colorTestController($scope){
 	$scope.progressBarClass = 'progress progress-warning';
 	$scope.progressValue= '1';
 	$scope.progressMax = '100';
+	$scope.backgroundId = 'nuetral';
 	
 
 		
@@ -373,6 +374,7 @@ function colorTestController($scope){
 					targetArray =  [[h,0,l],[h,0,l+differenceArray[0][0]],[h, 0, l+differenceArray[0][1]]];
 			}else{differenceArray.pop();}
 		}
+        console.log("checking targetArray",targetArray);
 
         targetArray = shuffle(targetArray);
         return targetArray;
@@ -422,10 +424,10 @@ function colorTestController($scope){
     function getFirstQuestion(){
 
         var firstQuestion = questionGenerater({
-            minS: 1,
+            minS: 0.85,
             maxS: 1,
-            minL: 0.5,
-            maxL: 0.5,
+            minL: 0.4,
+            maxL: 0.6,
             difference: 0.1,
             level: 0,
             color2Type: null,
@@ -592,10 +594,21 @@ function colorTestController($scope){
         $scope.noOfQuestions += 1;
         currentQuestion.answer = choice;
         if (currentQuestion.correctAnswer === choice) {
+            
+            $scope.backgroundId = 'right';
+            $timeout(function () {
+              $scope.backgroundId = "neutral";
+          }, 500);
             $scope.result = true;
             currentQuestion.result = true;
+        }else{
+            $scope.backgroundId = 'wrong';
+            $timeout(function () {
+              $scope.backgroundId = "neutral";
+          }, 500);
         }
         questionHistory.push(currentQuestion);
+        
         
         /* check whether test finished */
         switch($scope.noOfQuestions){
