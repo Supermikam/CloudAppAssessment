@@ -1,0 +1,25 @@
+<div class='container' id = {{backgroundId}}>
+	
+    <div class='container'>
+	
+		<div id="top" >
+			<h1><a href='#/start'><img src='images/eye.jpg'/></a>The color at the center is as grey as ...</h1>
+		</div>
+		
+        <div id='test-content'>
+            <canvas  id="board" width='600px' height = '600px' ng-click = 'handleClick($event)'></canvas>
+
+        </div>
+        
+		<div id='bottom'>
+			<progress class={{progressBarClass}} value={{progressValue}} max={{progressMax}}></progress>
+		</div>
+		
+		<div ng-show = 'testFinished' ng-click = 'initializeTest()' >
+			<p>Your test result is {{testResult}} out of 5</p>
+			<p >RESTART</p>
+			
+		</div>
+        
+    </div>
+</div>

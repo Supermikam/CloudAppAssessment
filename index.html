@@ -8,36 +8,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel='stylesheet'>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
 
 <link href="index.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Trirong" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Trirong|Francois+One|Wendy+One|Fjalla+One" rel="stylesheet">
 </head>
 
 <body ng-app = 'app' >
 	
-	<div class='container' id = {{backgroundId}}
+	<div ng-view></div>
+	<script src='app.js'></script>
+	<script src='testController.js'></script>
+	<script src='resultController.js'></script>
 	
-    <div class='container' ng-controller = 'colorTestController'>
-	
-		<div id="top" >
-			<h1>The color at the center is as grey as ...</h1>
-
-		</div>
-		
-        <div id='test-content'>
-            <canvas  id="board" width='600px' height = '600px' ng-click = 'handleClick($event)'></canvas>
-
-        </div>
-        
-		<div id='bottom'>
-			<progress class={{progressBarClass}} value={{progressValue}} max={{progressMax}}></progress>
-		</div>
-		
-		<div ng-show = 'testFinished' ng-click = 'initializeTest' >
-			<p >RESTART</p>
-		</div>
-        
-    </div>
-	<script src='controller.js'></script>
 </body>
 </html>

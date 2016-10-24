@@ -1,5 +1,38 @@
-/*global angular, $scope*/
+/*global angular, $scope,resultService*/
 
+
+
+angular.module('test',[]).controller('colorTestController',colorTestController);
+function colorTestController($scope, $timeout, $location,resultService){
+    var questionHistory;
+    var currentQuestion;
+    var levelArgs = [
+            {minS: 0.85, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.15, level: 0, color2Type: null},
+            {minS: 0.5, maxS: 0.85, minL: 0.4, maxL: 0.6, difference: 0.15, level: 1, color2Type: null},
+            {minS: 0.3, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.1, level: 2, color2Type: null},
+            {minS: 0.3, maxS: 1, minL: 0.2, maxL: 0.7, difference: 0.08, level: 3, color2Type: null},
+            {minS: 0.5, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.1, level: 4, color2Type: "contrast"},
+            {minS: 0.3, maxS: 1, minL: 0.2, maxL: 0.7, difference: 0.1, level: 5, color2Type: "random"},
+        ];
+    var evaluations = [
+        'You seem to have just started seeing color as a combination of different charactors. A basic understanding and training might be needed.',
+        'You get the idea of the difference of hue and brightness, but you have some difficulty seperate hue from brightness.',
+        'You have some basic sensitivity over the brightness of color, but the purity and hue of a color affects you too much.',
+        'You are quite sensitive over the brihtness of color. But you sensitivity is affected by the environment the color is presented in.',
+        'You are a master of color.'
+        ]
+    var checkPoint = [6,9,12];
+    $scope.testFinished = false;
+    $scope.testResult = null;
+	$scope.canvasHeight = '500px';
+	$scope.canvasWidth = ' 500px';
+	$scope.barHeight = '50px';
+	$scope.progressBarClass = 'progress progress-warning';
+	$scope.progressValue= '1';
+	$scope.progressMax = '100';
+	$scope.backgroundId = 'nuetral';
+	
+	
 	var canvas = document.getElementById('board');
 	var ctx = canvas.getContext('2d');
 	var topBar = document.getElementById('top');
@@ -268,31 +301,7 @@
 		
 	//window.addEventListener('load', resizePage, false);
 	//window.addEventListener('resize', resizePage, false);
-	//canvas.addEventListener('click', returnChoice,false);
 
-angular.module('app',[]).controller('colorTestController',colorTestController);
-function colorTestController($scope, $timeout){
-    var questionHistory;
-    var currentQuestion;
-    var levelArgs = [
-            {minS: 0.85, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.15, level: 0, color2Type: null},
-            {minS: 0.5, maxS: 0.85, minL: 0.4, maxL: 0.6, difference: 0.15, level: 1, color2Type: null},
-            {minS: 0.3, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.1, level: 2, color2Type: null},
-            {minS: 0.3, maxS: 1, minL: 0.2, maxL: 0.7, difference: 0.08, level: 3, color2Type: null},
-            {minS: 0.5, maxS: 1, minL: 0.4, maxL: 0.6, difference: 0.1, level: 4, color2Type: "contrast"},
-            {minS: 0.3, maxS: 1, minL: 0.2, maxL: 0.7, difference: 0.1, level: 5, color2Type: "random"},
-        ];
-    var checkPoint = [6,9,12];
-    $scope.testFinished = false;
-    $scope.testResult = null;
-	$scope.canvasHeight = '500px';
-	$scope.canvasWidth = ' 500px';
-	$scope.barHeight = '50px';
-	$scope.progressBarClass = 'progress progress-warning';
-	$scope.progressValue= '1';
-	$scope.progressMax = '100';
-	$scope.backgroundId = 'nuetral';
-	
 
 		
     function calculateTargetL(hsl){
@@ -660,8 +669,25 @@ function colorTestController($scope, $timeout){
             var finalResultArray = generateTheArrayOfTestResultForAnalyse();
             $scope.testResult = analyseTest(finalResultArray);
             $scope.progressValue = '100';
+            resultService.testResult = $scope.testResult;
+            resultService.percentage = 0.2;
+            resultService.evaluation = getEvaluation($scope.testResult);
+            $location.path('/finish');
         }
     };
+	
+	function getEvaluation(result){
+	    if (result == 0){
+	        return evaluations[0];
+	    }else if((result >0) & (result <=1)){
+	        return evaluations[1];
+	    }else if((result >1) & (result <= 3)){
+	        return evaluations[2];
+	    }else if((result >3) & (result <= 4)){
+	        return evaluations[3];
+	    }else{ return evaluations[4];}
+	    
+	}
 	
 	$scope.handleClick = function(event){
         if (!$scope.testFinished){
