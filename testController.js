@@ -3,7 +3,7 @@
 
 
 angular.module('test',[]).controller('colorTestController',colorTestController);
-function colorTestController($scope, $timeout, $location,resultService){
+function colorTestController($scope, $timeout, $location,$http,resultService){
     var questionHistory;
     var currentQuestion;
     var levelArgs = [
@@ -670,11 +670,33 @@ function colorTestController($scope, $timeout, $location,resultService){
             $scope.testResult = analyseTest(finalResultArray);
             $scope.progressValue = '100';
             resultService.testResult = $scope.testResult;
-            resultService.percentage = 0.2;
+            
+            
+            // ranking Ajax Call
+            
+            $http({
+                method : "POST",
+                url : "/Results/SaveResultAndGetRanking"
+            }).then(function mySucces(response) {
+                console.log('succsessfully getting ranking result, result is: ', response.data);
+                resultService.percentage = turnIntoPercentageExpression(response.data);
+            }, function myError(response) {
+                resultService.percentage = 20;
+            });
+            
+            
+            
             resultService.evaluation = getEvaluation($scope.testResult);
             $location.path('/finish');
         }
     };
+	
+	// change the response data into a string in the format of '25'
+	function turnIntoPercentageExpression(percentage){
+	    
+	}
+	
+	
 	
 	function getEvaluation(result){
 	    if (result == 0){

@@ -11,7 +11,7 @@ app.config(function ($routeProvider) {
 
 app.service('resultService', function () {
     var testResult = null;
-    var percentage = 0.2;
+    var percentage = 20;
     var evaluation = null;
     return testResult;
 });
